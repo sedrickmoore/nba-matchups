@@ -37,16 +37,13 @@ function App() {
     "Press the top corner button to display a Laker here"
   );
   const [visits, setVisits] = useState("You have never visited this page.");
-  var randomPlayer = (min, max) => {
-    return Math.floor(Math.random() * (16 - 0 + 1)) + min;
-  };
+
   function switchFact() {
-    /* fetch("https://uselessfacts.jsph.pl/api/v2/facts/random", requestOptions)
-    .then((response) => response.json())
-    .then((result) => {
-      setFact(result.text)
-    })
-    .catch((error) => console.error(error)) */
+    const randomNum = (min, max) => {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    };
+    let randomPlayer = randomNum(0,24)
+    console.log(randomPlayer)
     fetch(
       "https://api-nba-v1.p.rapidapi.com/players?team=17&season=2023",
       bbRequestOptions
@@ -54,7 +51,9 @@ function App() {
       .then((response) => response.json())
       .then((result) =>
         setFact(
-          result.response[0].firstname + " " + result.response[0].lastname
+          result.response[randomPlayer].firstname +
+            " " +
+            result.response[randomPlayer].lastname
         )
       )
       .catch((error) => console.error(error));
