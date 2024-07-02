@@ -10,10 +10,62 @@ import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import "./App.css";
-// import characters from './protagonists.json'
+import characters from "./protagonists.json";
+import CharacterCard from "./CharacterCard";
+import { useState } from "react";
+
+var requestOptions = {
+  mode: "no-cors",
+  method: "GET",
+  redirect: "follow",
+};
+
+const myHeaders = new Headers();
+myHeaders.append(
+  "X-RapidAPI-Key",
+  "95f88eebc2mshbafbf69143a8984p134fcdjsnd439ffca347a"
+);
+
+const bbRequestOptions = {
+  method: "GET",
+  headers: myHeaders,
+  redirect: "follow",
+};
 
 function App() {
+  const [myFact, setFact] = useState(
+    "Press the top corner button to display a Laker here"
+  );
+  const [visits, setVisits] = useState("You have never visited this page.");
+  var randomPlayer = (min, max) => {
+    return Math.floor(Math.random() * (16 - 0 + 1)) + min;
+  };
+  function switchFact() {
+    /* fetch("https://uselessfacts.jsph.pl/api/v2/facts/random", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      setFact(result.text)
+    })
+    .catch((error) => console.error(error)) */
+    fetch(
+      "https://api-nba-v1.p.rapidapi.com/players?team=17&season=2023",
+      bbRequestOptions
+    )
+      .then((response) => response.json())
+      .then((result) =>
+        setFact(
+          result.response[0].firstname + " " + result.response[0].lastname
+        )
+      )
+      .catch((error) => console.error(error));
+  }
+  function updateVisits() {
+    fetch("http://localhost:5000/count", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
+  }
+  updateVisits();
   return (
     <div className="App">
       <CssBaseline />
@@ -30,10 +82,18 @@ function App() {
           <Button
             href="#"
             variant="outlined"
-            sx={{ my: 1, mx: 1.5 }}
-            onClick={() => alert("Boop!")}
+            sx={{
+              my: 1,
+              mx: 1.5,
+              color: "red",
+              background: "purple",
+              fontWeight: "bold",
+            }}
+            onClick={() => {
+              switchFact();
+            }}
           >
-            Button
+            New Fact
           </Button>
         </Toolbar>
       </AppBar>
@@ -51,8 +111,9 @@ function App() {
           align="center"
           color="text.secondary"
           sx={{ mx: 10 }}
+          id="subtitle"
         >
-          Hmm, seems like we're missing some of the other protagonists.
+          {myFact}
         </Typography>
       </Container>
       {/* End hero unit */}
@@ -63,44 +124,25 @@ function App() {
           justifyContent="center"
           alignItems="flex-start"
         >
-          <Grid item xs={12} md={4}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="350px"
-                image={"https://i.imgur.com/56chgMj.png"}
-              />
-              <CardHeader
-                title={"Miles Morales"}
-                titleTypographyProps={{ align: "center" }}
-                sx={{ mt: 1 }}
-              />
-              <CardContent sx={{ pt: 0 }}>
-                <ul>
-                  <Typography component="li">
-                    Definitely Not Spiderman
-                  </Typography>
-                  <Typography component="li">
-                    "Lanky Puberty Boy" vibes
-                  </Typography>
-                  <Typography component="li">Can't do it on demand</Typography>
-                  <Typography component="li">Elite music taste</Typography>
-                </ul>
-              </CardContent>
-              <CardActions>
-                <Button
-                  variant="contained"
-                  sx={{ px: 6, mx: "auto" }}
-                  // I'm trying to use custom CSS defined in the file App.css,
-                  // but it isn't working. Why, and how can I fix it?
-                  className="characterButton"
-                >
-                  Vote
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
+          {characters.map((oneCharacter) => (
+            <CharacterCard
+              title={oneCharacter.title}
+              images={oneCharacter.pic}
+              description={oneCharacter.description}
+            ></CharacterCard>
+          ))}
         </Grid>
+      </Container>
+      <Container>
+        <Typography
+          variant="h5"
+          align="center"
+          color="text.secondary"
+          sx={{ mx: 10 }}
+          id="subtitle"
+        >
+          {visits}
+        </Typography>
       </Container>
     </div>
   );
