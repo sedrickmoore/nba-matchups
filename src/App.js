@@ -10,139 +10,158 @@ import Grid from "@mui/material/Grid";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import characters from "./protagonists.json";
-import CharacterCard from "./CharacterCard";
+import PlayerCard from "./PlayerCard";
 import { useState } from "react";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import { blue } from "@mui/material/colors";
 
 var requestOptions = {
-  mode: "no-cors",
   method: "GET",
   redirect: "follow",
 };
 
-const myHeaders = new Headers();
-myHeaders.append(
-  "X-RapidAPI-Key",
-  "95f88eebc2mshbafbf69143a8984p134fcdjsnd439ffca347a"
-);
+let prevNum;
 
-const bbRequestOptions = {
-  method: "GET",
-  headers: myHeaders,
-  redirect: "follow",
-};
+let stats = ["Points", "Rebounds", "Assists", "Steals", "Blocks"];
 
 function App() {
-  const [myFact, setFact] = useState(
-    "Press the top corner button to display a Laker here"
-  );
-  const [visits, setVisits] = useState("You have never visited this page.");
-
-  function switchFact() {
-    const randomNum = (min, max) => {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    };
-    let randomPlayer = randomNum(0,24)
-    console.log(randomPlayer)
+  // use state variables
+  const [player1, setPlayer1] = useState({
+    FirstName: "Player",
+    LastName: "1",
+    Team: "",
+    Position: "",
+    Height: "",
+    Weight: "",
+    BirthDate: "",
+  });
+  const [player2, setPlayer2] = useState({
+    FirstName: "Player",
+    LastName: "2",
+    Team: "",
+    Position: "",
+    Height: "",
+    Weight: "",
+    BirthDate: "",
+  });
+  const [choice, setChoice] = useState("");
+  const [chosenStat, setChosenStat] = useState("Press 'Next' to Play!");
+  // functions set in variables
+  const randomNum = (min, max) => {
+    let newNum = Math.floor(Math.random() * (max - min + 1)) + min;
+    if (prevNum && newNum === prevNum) {
+      while (newNum === prevNum) {
+        newNum = Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+    }
+    prevNum = newNum;
+    return newNum;
+  };
+  const handleChange = (event) => {
+    setChoice(event.target.value);
+  };
+  // functions
+  function switchPlayer() {
+    let randomPlayer1 = randomNum(0, 465);
+    let randomPlayer2 = randomNum(0, 465);
     fetch(
-      "https://api-nba-v1.p.rapidapi.com/players?team=17&season=2023",
-      bbRequestOptions
+      "https://api.sportsdata.io/v3/nba/scores/json/PlayersActiveBasic?key=e57eb6a0c3f147a4b718b06925030d3d",
+      requestOptions
     )
       .then((response) => response.json())
-      .then((result) =>
-        setFact(
-          result.response[randomPlayer].firstname +
-            " " +
-            result.response[randomPlayer].lastname
+      .then(
+        (result) => (
+          setPlayer1(result[randomPlayer1]), setPlayer2(result[randomPlayer2])
         )
       )
       .catch((error) => console.error(error));
   }
-  function updateVisits() {
-    fetch("http://localhost:5000/count", requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.error(error));
+  function switchStat() {
+    let currentStat = randomNum(0, 4);
+    setChosenStat(stats[currentStat]);
   }
-  updateVisits();
+  // main react app return
   return (
-    <div className="App">
+    <div className="App" style={{ backgroundColor: "mediumpurple" }}>
       <CssBaseline />
-      <AppBar
-        position="static"
-        color="default"
-        elevation={0}
-        sx={{ borderBottom: "1px solid lightgray" }}
-      >
-        <Toolbar>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Characters Inc
-          </Typography>
-          <Button
-            href="#"
-            variant="outlined"
-            sx={{
-              my: 1,
-              mx: 1.5,
-              color: "red",
-              background: "purple",
-              fontWeight: "bold",
-            }}
-            onClick={() => {
-              switchFact();
-            }}
-          >
-            New Fact
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <Toolbar></Toolbar>
       <Container maxWidth="md" sx={{ my: 4 }}>
+        {/* Title */}
         <Typography
           variant="h2"
           align="center"
           color="text.primary"
-          sx={{ py: 2 }}
-        >
-          Prevalent Protagonists
-        </Typography>
+          sx={{ py: 2, color: "purple" }}
+        >NBA Matchups</Typography>
+        {/* Stat for current matchup */}
         <Typography
           variant="h5"
           align="center"
           color="text.secondary"
-          sx={{ mx: 10 }}
+          sx={{ mx: 10, color:"purple" }}
           id="subtitle"
         >
-          {myFact}
+          {chosenStat}
         </Typography>
       </Container>
-      {/* End hero unit */}
-      <Container maxWidth="lg">
-        <Grid
-          container
-          spacing={5}
-          justifyContent="center"
-          alignItems="flex-start"
+      {
+        <Container maxWidth="lg">
+          {/* Main content */}
+          <Grid
+            container
+            spacing={5}
+            justifyContent="center"
+            alignItems="flex-start"
+          >
+            {/* Left NBA player */}
+            {PlayerCard(player1)}
+            {/* Select for player to make choice */}
+            <Select
+              sx={{
+                my: 15,
+                mx: 15
+              }}
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={choice}
+              label="Choice"
+              onChange={handleChange}
+            >
+              <MenuItem value={1}>{">"}</MenuItem>
+              <MenuItem value={0}>{"="}</MenuItem>
+              <MenuItem value={2}>{"<"}</MenuItem>
+            </Select>
+            {/* Right NBA player */}
+            {PlayerCard(player2)}
+          </Grid>
+        </Container>
+      }
+
+      <Grid item xs={12} md={4}>
+        {/* Next button */}
+        <Button
+          href="#"
+          variant="outlined"
+          sx={{
+            my: 10,
+            mx: 90,
+            marginBottom: 100,
+            color: "gold",
+            background: "purple",
+            fontWeight: "bold",
+            fontSize: 15,
+          }}
+          onClick={() => {
+            switchPlayer();
+            switchStat();
+          }}
         >
-          {characters.map((oneCharacter) => (
-            <CharacterCard
-              title={oneCharacter.title}
-              images={oneCharacter.pic}
-              description={oneCharacter.description}
-            ></CharacterCard>
-          ))}
-        </Grid>
-      </Container>
-      <Container>
-        <Typography
-          variant="h5"
-          align="center"
-          color="text.secondary"
-          sx={{ mx: 10 }}
-          id="subtitle"
-        >
-          {visits}
-        </Typography>
-      </Container>
+          Next
+        </Button>
+        
+      </Grid>
     </div>
   );
 }
