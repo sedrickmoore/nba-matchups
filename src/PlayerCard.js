@@ -38,17 +38,6 @@ export default function PlayerCard(player) {
                     </Typography>
                 </ul>
               </CardContent>
-             {/*  <CardActions>
-                <Button
-                  variant="contained"
-                  sx={{ px: 6, mx: "auto", background:"purple", color:"orchid"}}
-                  // onClick={() => {
-                  //   fetchFact()
-                  // }}
-                >
-                  Choose 
-                </Button>
-              </CardActions> */}
             </Card>
           </Grid>
   );
