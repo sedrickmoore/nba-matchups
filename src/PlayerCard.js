@@ -1,17 +1,14 @@
 import * as React from 'react';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from "@mui/material/CardHeader";
-import CardMedia from '@mui/material/CardMedia';
 import Grid from "@mui/material/Grid";
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 export default function PlayerCard(player) {
   return (
     <Grid item xs={12} md={4}>
-            <Card sx={{background:"gold", color:"purple" }}>
+            <Card sx={{background:"gold", color:"purple", width:350, justifyContent:"center"}}>
               <CardHeader
               title={player.FirstName +
                 " " +
@@ -19,7 +16,7 @@ export default function PlayerCard(player) {
                 titleTypographyProps={{ align: "center" }}
                 sx={{ mt: 1}}
               />
-              <CardContent sx={{ pt: 0}}>
+              <CardContent sx={{ pt: 10}}>
                 <ul>
                    <Typography component="li">
                       {"Team: " + player.Team}
