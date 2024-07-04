@@ -8,7 +8,15 @@ import Typography from '@mui/material/Typography';
 export default function PlayerCard(player) {
   return (
     <Grid item xs={12} md={4}>
-            <Card sx={{background:"gold", color:"purple", width:350, justifyContent:"center"}}>
+            <Card sx={{ 
+              backgroundColor: 'rgba(255, 255, 255, 0.5)', 
+              backdropFilter: 'blur(8px)',
+              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+              borderRadius: 8,
+              p: 2,
+              color:"black", 
+              width:350, 
+              justifyContent:"center"}}>
               <CardHeader
               title={player.FirstName +
                 " " +
