@@ -47,7 +47,7 @@ const nbaColors = {
   "Charlotte Hornets": ["#00788C", "#1D1160"],
   "Chicago Bulls": ["#CE1141", "#000000"],
   "Cleveland Cavaliers": ["#860038", "#041E42"],
-  "Dallas Mavericks": ["#00538C", "#002B5E"],
+  "Dallas Mavericks": ["#FFFFFF", "#002B5E"],
   "Denver Nuggets": ["#FEC524", "#0E2240"],
   "Detroit Pistons": ["#C8102E", "#1D42BA"],
   "Golden State Warriors": ["#FFC72C", "#1D428A"],
@@ -97,8 +97,8 @@ function App() {
   const [currentPrimary, setCurrentPrimary] = useState(homePrimary);
   const [currentSecondary, setCurrentSecondary] = useState(homeSecondary);
   const [userName, setUserName] = useState("");
-  const [introOpen, setIntroOpen] = useState(true)
-  const [highScore, setHighScore] = useState(["",0])
+  const [introOpen, setIntroOpen] = useState(true);
+  const [highScore, setHighScore] = useState(["", 0]);
   const [inputError, setInputError] = useState(false);
   // regular variables
   let p1;
@@ -219,8 +219,11 @@ function App() {
   const handleClose = () => setOpen(false);
   const handleTeamOpen = () => setTeamOpen(true);
   const handleTeamClose = () => setTeamOpen(false);
-  const handleIntroOpen = () => setIntroOpen(true)
-  const handleIntroClose = ()=> setIntroOpen(false);
+  const handleIntroOpen = () => {
+    setIntroOpen(true);
+    setUserPoints(0);
+  };
+  const handleIntroClose = () => setIntroOpen(false);
   const switchChange = (event) => {
     setChecked(event.target.checked);
     if (checked) {
@@ -258,6 +261,23 @@ function App() {
       },
     },
   });
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    // Perform your validation logic here
+    // For example, checking if the username is empty
+    if (value.trim() === "" || value.length > 20) {
+      setInputError(true);
+    } else {
+      setInputError(false);
+    }
+    setUserName(value);
+  };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && userName.trim() !== "" && userName.length < 20) {
+      handleTeamOpen();
+      handleIntroClose();
+    }
+  };
   // functions
   // Switches players and grabs and sets their player ID
   function switchPlayer(callback) {
@@ -411,7 +431,7 @@ function App() {
         handleOpen();
       }, 1000);
       if (userPoints > highScore[1]) {
-        setHighScore([userName,userPoints])
+        setHighScore([userName, userPoints]);
       }
     }
   }, [timer]);
@@ -675,12 +695,12 @@ function App() {
               id="modal-modal-description"
               sx={{ mt: 2, textAlign: "center", color: currentPrimary }}
             >
-              The high score is {highScore[0]}: {highScore[1]}.
+              High Score: {highScore[0]} - {highScore[1]}.
             </Typography>
             <Button
               variant="outlined"
               sx={{
-                my: 5,
+                my: 3,
                 mx: 5,
                 color: currentSecondary,
                 background: currentPrimary,
@@ -695,11 +715,28 @@ function App() {
             >
               Play Again
             </Button>
+            <Button
+              variant="outlined"
+              sx={{
+                my: 1,
+                mx: 5,
+                color: currentSecondary,
+                background: currentPrimary,
+                "&:hover": {
+                  backgroundColor: "transparent",
+                  color: currentPrimary,
+                },
+                fontWeight: "bold",
+                fontSize: 15,
+              }}
+              onClick={handleIntroOpen}
+            >
+              Change Player
+            </Button>
           </Box>
         </Modal>
         <Modal
           open={teamOpen}
-          // onClose={handleTeamClose}
           aria-labelledby="nba-team-picker"
           aria-describedby="team-picker"
         >
@@ -758,9 +795,10 @@ function App() {
               <u>The Game</u>
               <br />
               <br />
-              In one minute, you must guess which of two players have the higher
+              Each round, you must guess which of two players have the higher
               stat in the chosen category.
               <br />
+              You have one minute to make as many correct guesses as you can.<br />
               A correct guess is 10 points, but guess wrong, and you lose 10.
               <br />
               You may skip if you are not sure and want to preserve your points.
@@ -769,33 +807,30 @@ function App() {
               <u>Keep In Mind</u>
               <br />
               <br />
-              This is for the '23,'24 season! <br />
+              This is for the '23 -'24 season! <br />
               As a curveball, rookies are included, but do not have stats.
               <br />
-              The background changes based on your favorite team. <br />
-              There is also a light/dark toggle in the top left corner.
+              You can change your favorite team in the top right corner.<br />
+              You can toggle light/dark backgrounds in the top left corner.
               <br />
               <br />
               To start, enter your name:
             </Typography>
             <form>
-            <TextField
-              id="outlined-basic"
-              label="Enter Name"
-              value={userName}
-              variant="outlined"
-              sx={{
-                backgroundColor: currentPrimary,
-                input: { color: currentSecondary },
-              }}
-              onKeyDown={(e) => {
-                if (e.key == "Enter") {handleTeamOpen();
-                handleIntroClose();}
-              }}
-              onChange={(event) => {
-                setUserName(event.target.value);
-              }}
-            />
+              <TextField
+                id="outlined-basic"
+                label="Enter Name"
+                value={userName}
+                variant="outlined"
+                error={inputError} // Pass error state to the TextField
+                helperText={inputError ? "Invalid input" : ""}
+                sx={{
+                  backgroundColor: currentPrimary,
+                  input: { color: currentSecondary },
+                }}
+                onKeyDown={handleKeyDown}
+                onChange={handleInputChange}
+              />
             </form>
           </Box>
         </Modal>
