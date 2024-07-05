@@ -16,13 +16,13 @@ import Modal from "@mui/material/Modal";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
+import { TextField } from "@mui/material";
 
 var requestOptions = {
   method: "GET",
   redirect: "follow",
 };
 let prevNum;
-let highScore = 0;
 const stats = [
   "Points",
   "Rebounds",
@@ -96,7 +96,10 @@ function App() {
   const [awaySecondary, setAwaySecondary] = useState("white");
   const [currentPrimary, setCurrentPrimary] = useState(homePrimary);
   const [currentSecondary, setCurrentSecondary] = useState(homeSecondary);
-
+  const [userName, setUserName] = useState("");
+  const [introOpen, setIntroOpen] = useState(true)
+  const [highScore, setHighScore] = useState(["",0])
+  const [inputError, setInputError] = useState(false);
   // regular variables
   let p1;
   let p2;
@@ -216,16 +219,16 @@ function App() {
   const handleClose = () => setOpen(false);
   const handleTeamOpen = () => setTeamOpen(true);
   const handleTeamClose = () => setTeamOpen(false);
+  const handleIntroOpen = () => setIntroOpen(true)
+  const handleIntroClose = ()=> setIntroOpen(false);
   const switchChange = (event) => {
     setChecked(event.target.checked);
     if (checked) {
       setSwitchLabel("Home");
-      console.log("Home");
       setCurrentPrimary(homePrimary);
       setCurrentSecondary(homeSecondary);
     } else {
       setSwitchLabel("Away");
-      console.log("Away");
       setCurrentPrimary(awayPrimary);
       setCurrentSecondary(awaySecondary);
     }
@@ -235,7 +238,6 @@ function App() {
     setFavTeam(event.target.value);
     setTeamOpen(false);
     setOpen(false);
-    console.log(checked);
     if (!checked) {
       setChecked(false);
       setSwitchLabel("Home");
@@ -403,54 +405,51 @@ function App() {
   useEffect(() => {
     switchPlayer();
   }, []);
-
   useEffect(() => {
     if (timer === "00:01") {
       setTimeout(() => {
         handleOpen();
       }, 1000);
-      if(userPoints > highScore){
-        highScore = userPoints
-      } 
+      if (userPoints > highScore[1]) {
+        setHighScore([userName,userPoints])
+      }
     }
   }, [timer]);
-  useEffect(() => {
-    handleTeamOpen();
-  }, []);
   // main react app return
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         <CssBaseline />
         <Container
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center"
-        }}>
-        <FormControlLabel
-          control={<MaterialUISwitch sx={{ m: 1 }} />}
-          sx={{ color: currentSecondary}}
-          label={switchLabel}
-          checked={checked}
-          onChange={switchChange}
-        />
-        <Button
-          variant="contained"
-          color="primary"
           sx={{
-            margin: "5px",
-            background: currentSecondary,
-            color: currentPrimary,
-            "&:hover": {
-              backgroundColor: "transparent",
-              color: currentSecondary,
-            },
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
           }}
-          onClick={handleTeamOpen}
         >
-          {favTeam}
-        </Button>
+          <FormControlLabel
+            control={<MaterialUISwitch sx={{ m: 1 }} />}
+            sx={{ color: currentSecondary }}
+            label={switchLabel}
+            checked={checked}
+            onChange={switchChange}
+          />
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              margin: "5px",
+              background: currentSecondary,
+              color: currentPrimary,
+              "&:hover": {
+                backgroundColor: "transparent",
+                color: currentSecondary,
+              },
+            }}
+            onClick={handleTeamOpen}
+          >
+            {favTeam}
+          </Button>
         </Container>
         <Toolbar
           sx={{
@@ -476,7 +475,7 @@ function App() {
                 sx={{ mx: 10, color: currentSecondary }}
                 id="userpoints"
               >
-                Score: {userPoints}
+                {userName}'s Score: {userPoints}
               </Typography>
               <Button
                 variant="outlined"
@@ -676,7 +675,7 @@ function App() {
               id="modal-modal-description"
               sx={{ mt: 2, textAlign: "center", color: currentPrimary }}
             >
-              The high score is {highScore}.
+              The high score is {highScore[0]}: {highScore[1]}.
             </Typography>
             <Button
               variant="outlined"
@@ -727,6 +726,77 @@ function App() {
               Pick Your Favorite Team
             </Typography>
             <ListTeams teams={Object.keys(nbaColors)} />
+          </Box>
+        </Modal>
+        <Modal
+          open={introOpen}
+          aria-labelledby="nba-team-picker"
+          aria-describedby="team-picker"
+        >
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 1000,
+              bgcolor: currentSecondary,
+              border: "2px solid #000",
+              boxShadow: 24,
+              p: 4,
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              sx={{ textAlign: "center", color: currentPrimary, p: 3 }}
+            >
+              Welcome to NBA Matchup! <br />
+              <br />
+              <u>The Game</u>
+              <br />
+              <br />
+              In one minute, you must guess which of two players have the higher
+              stat in the chosen category.
+              <br />
+              A correct guess is 10 points, but guess wrong, and you lose 10.
+              <br />
+              You may skip if you are not sure and want to preserve your points.
+              <br />
+              <br />
+              <u>Keep In Mind</u>
+              <br />
+              <br />
+              This is for the '23,'24 season! <br />
+              As a curveball, rookies are included, but do not have stats.
+              <br />
+              The background changes based on your favorite team. <br />
+              There is also a light/dark toggle in the top left corner.
+              <br />
+              <br />
+              To start, enter your name:
+            </Typography>
+            <form>
+            <TextField
+              id="outlined-basic"
+              label="Enter Name"
+              value={userName}
+              variant="outlined"
+              sx={{
+                backgroundColor: currentPrimary,
+                input: { color: currentSecondary },
+              }}
+              onKeyDown={(e) => {
+                if (e.key == "Enter") {handleTeamOpen();
+                handleIntroClose();}
+              }}
+              onChange={(event) => {
+                setUserName(event.target.value);
+              }}
+            />
+            </form>
           </Box>
         </Modal>
       </div>
