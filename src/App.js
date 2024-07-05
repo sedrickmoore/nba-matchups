@@ -430,6 +430,10 @@ function App() {
       setTimeout(() => {
         handleOpen();
       }, 1000);
+    }
+  }, [timer]);
+  useEffect(() => {
+    if (timer === "00:00") {
       if (userPoints > highScore[1]) {
         setHighScore([userName, userPoints]);
       }
@@ -627,7 +631,7 @@ function App() {
                   }}
                   // Switches player, switches the comparitive stat, switches the players stats to compare, sumbits choice
                   onClick={() => {
-                    if (timer > "00:00:00") {
+                    if (timer > "00:00") {
                       switchPlayer(submitChoice);
                     }
                   }}
