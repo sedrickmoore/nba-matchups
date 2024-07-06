@@ -18,6 +18,9 @@ import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
 import { TextField } from "@mui/material";
 
+const apiKey = process.env.REACT_APP_NBA_API_KEY;
+
+
 var requestOptions = {
   method: "GET",
   redirect: "follow",
@@ -427,7 +430,7 @@ function App() {
     let randomPlayer1 = randomNum(0, 465);
     let randomPlayer2 = randomNum(0, 465);
     fetch(
-      "https://api.sportsdata.io/v3/nba/scores/json/PlayersActiveBasic?key=1eccc8cbb6d44ff0a7a7eb852df96606",
+      `https://api.sportsdata.io/v3/nba/scores/json/PlayersActiveBasic?key=${apiKey}`,
       requestOptions
     )
       .then((response) => response.json())
@@ -457,7 +460,7 @@ function App() {
   // Changes player stats
   function switchPlayerStat(playerID, stat, setPlayerStat) {
     fetch(
-      `https://api.sportsdata.io/v3/nba/stats/json/PlayerSeasonStatsByPlayer/2024/${playerID}?key=1eccc8cbb6d44ff0a7a7eb852df96606`,
+      `https://api.sportsdata.io/v3/nba/stats/json/PlayerSeasonStatsByPlayer/2024/${playerID}?key=${apiKey}`,
       requestOptions
     )
       .then((response) => {
