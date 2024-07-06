@@ -98,7 +98,16 @@ function App() {
   const [currentSecondary, setCurrentSecondary] = useState(homeSecondary);
   const [userName, setUserName] = useState("");
   const [introOpen, setIntroOpen] = useState(true);
-  const [highScore, setHighScore] = useState(["", 0]);
+  const [streak, setStreak] = useState(0)
+  const [streakTracker, setStreakTracker] = useState("")
+  const [highScore, setHighScore] = useState([
+    ["Player 1", 50, 5],
+    ["Player 2", 40, 4],
+    ["Player 3", 30, 3],
+    ["Player 4", 20, 2],
+    ["Player 5", 10, 1],
+  ]);
+  const [longestStreak, setLongestStreak] = useState(0)
   const [inputError, setInputError] = useState(false);
   // regular variables
   let p1;
@@ -173,16 +182,58 @@ function App() {
   const submitChoice = () => {
     if (player1Stat > player2Stat) {
       if (choice == 1) {
-        updateScore(10);
+        if(streak >= 0 && streak < 2){
+          updateScore(10);
+          setStreak(streak + 1);
+          if(streak > longestStreak){
+            setLongestStreak(streak)
+          }
+          if(streak === 0){
+            setStreakTracker('')
+          }
+          else if(streak === 1){
+            setStreakTracker('🔥')
+          }
+        } else if (streak >= 2 && streak < 5){
+          updateScore(20);
+          setStreak(streak + 1);
+          if(streak > longestStreak){
+            setLongestStreak(streak)
+          }
+          if(streak === 2){
+            setStreakTracker('🔥🔥')
+          }
+        } else {
+          updateScore(30);
+          setStreak(streak + 1);
+          if(streak > longestStreak){
+            setLongestStreak(streak)
+          }
+          if(streak === 5){
+            setStreakTracker('🔥🔥🔥')
+          }
+        }
       } else if (choice == 2) {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
+          setStreak(0)
+          if(streak === 0){
+            setStreakTracker('🥶')
+          } else {
+            setStreakTracker('')
+          }
         }
       } else if (choice == 0) {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
+          setStreak(0)
+          if(streak === 0){
+            setStreakTracker('🥶')
+          } else {
+            setStreakTracker('')
+          }
         }
       }
     } else if (player1Stat < player2Stat) {
@@ -190,13 +241,55 @@ function App() {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
+          setStreak(0)
+          if(streak === 0){
+            setStreakTracker('🥶')
+          } else {
+            setStreakTracker('')
+          }
         }
       } else if (choice == 2) {
-        updateScore(10);
+        if(streak >= 0 && streak < 2){
+          updateScore(10);
+          setStreak(streak + 1);
+          if(streak > longestStreak){
+            setLongestStreak(streak)
+          }
+          if(streak === 0){
+            setStreakTracker('')
+          }
+          else if(streak === 1){
+            setStreakTracker('🔥')
+          }
+        } else if (streak >= 2 && streak < 5){
+          updateScore(20);
+          setStreak(streak + 1);
+          if(streak > longestStreak){
+            setLongestStreak(streak)
+          }
+          if(streak === 2){
+            setStreakTracker('🔥🔥')
+          }
+        } else {
+          updateScore(30);
+          setStreak(streak + 1);
+          if(streak > longestStreak){
+            setLongestStreak(streak)
+          }
+          if(streak === 5){
+            setStreakTracker('🔥🔥🔥')
+          }
+        }
       } else if (choice == 0) {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
+          setStreak(0)
+          if(streak === 0){
+            setStreakTracker('🥶')
+          } else {
+            setStreakTracker('')
+          }
         }
       }
     } else if (player1Stat == player2Stat) {
@@ -204,24 +297,74 @@ function App() {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
+          setStreak(0)
+          if(streak === 0){
+            setStreakTracker('🥶')
+          } else {
+            setStreakTracker('')
+          }
         }
       } else if (choice == 2) {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
+          setStreak(0)
+          if(streak === 0){
+            setStreakTracker('🥶')
+          } else {
+            setStreakTracker('')
+          }
         }
       } else if (choice == 0) {
-        updateScore(10);
+        if(streak >= 0 && streak < 2){
+          updateScore(10);
+          setStreak(streak + 1);
+          if(streak > longestStreak){
+            setLongestStreak(streak)
+          }
+          if(streak === 0){
+            setStreakTracker('')
+          }
+          else if(streak === 1){
+            setStreakTracker('🔥')
+          }
+        } else if (streak >= 2 && streak < 5){
+          updateScore(20);
+          setStreak(streak + 1);
+          if(streak > longestStreak){
+            setLongestStreak(streak)
+          }
+          if(streak === 2){
+            setStreakTracker('🔥🔥')
+          }
+        } else {
+          updateScore(30);
+          setStreak(streak + 1);
+          if(streak > longestStreak){
+            setLongestStreak(streak)
+          }
+          if(streak === 5){
+            setStreakTracker('🔥🔥🔥')
+          }
+        }
       }
     }
+    console.log(`streak = ${streak}`)
   };
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setStreakTracker("")
+    setLongestStreak(0)
+  }
   const handleTeamOpen = () => setTeamOpen(true);
   const handleTeamClose = () => setTeamOpen(false);
   const handleIntroOpen = () => {
     setIntroOpen(true);
     setUserPoints(0);
+    setStreak(0)
+    setStreakTracker("")
+    setLongestStreak(0)
   };
   const handleIntroClose = () => setIntroOpen(false);
   const switchChange = (event) => {
@@ -299,35 +442,72 @@ function App() {
         setPlayer2ID(id2);
         let currentStat = randomNum(0, 5);
         setChosenStat(stats[currentStat]);
-        switchPlayer1Stat(id1, stats[currentStat]);
-        switchPlayer2Stat(id2, stats[currentStat]);
+        switchPlayerStat(id1, stats[currentStat], setPlayer1Stat);
+        switchPlayerStat(id2, stats[currentStat], setPlayer2Stat);
+        console.log(
+          `Player 1 is ${p1.FirstName} ${p1.LastName} ID = ${p1.PlayerID}`
+        );
+        console.log(
+          `Player 2 is ${p2.FirstName} ${p2.LastName} ID = ${p2.PlayerID}`
+        );
         if (callback) callback();
       })
       .catch((error) => console.error(error));
   }
   // Changes player stats
-  function switchPlayer1Stat(playerID, stat) {
+  function switchPlayerStat(playerID, stat, setPlayerStat) {
     fetch(
       `https://api.sportsdata.io/v3/nba/stats/json/PlayerSeasonStatsByPlayer/2024/${playerID}?key=1eccc8cbb6d44ff0a7a7eb852df96606`,
       requestOptions
     )
-      .then((response) => response.json())
-      .then(
-        (result) => ((pStat = result[statsMap[stat]]), setPlayer1Stat(pStat))
-      )
-      .catch((error) => console.error(error));
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.text(); // Get response body as text
+      })
+      .then((text) => {
+        try {
+          const result = JSON.parse(text); // Attempt to parse JSON
+          if (Object.keys(result).length === 0) {
+            // Handle empty object scenario
+            setPlayerStat(0);
+            if (setPlayerStat == setPlayer1Stat) {
+              console.log(`Player 1 ${stat} = 0 (empty result)`);
+            } else if (setPlayerStat == setPlayer2Stat) {
+              console.log(`Player 2 ${stat} = 0 (empty result)`);
+            }
+          } else {
+            const pStat = result[statsMap[stat]];
+            if (pStat === undefined) {
+              throw new Error(
+                `Statistic '${stat}' not found for player ${playerID}`
+              );
+            }
+            setPlayerStat(pStat);
+            if (setPlayerStat == setPlayer1Stat) {
+              console.log(`Player 1 ${stat} = ${pStat}`);
+            } else if (setPlayerStat == setPlayer2Stat) {
+              console.log(`Player 2 ${stat} = ${pStat}`);
+            }
+          }
+        } catch (error) {
+          // Handle JSON parsing errors or empty response
+          // console.error('Error parsing JSON or empty response:', error);
+          setPlayerStat(0); // Set pStat to 0 in case of parsing error
+          if (setPlayerStat == setPlayer1Stat) {
+            console.log(`Player 1 ${stat} = 0 (empty response)`);
+          } else if (setPlayerStat == setPlayer2Stat) {
+            console.log(`Player 2 ${stat} = 0 (empty response)`);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching player stats:", error);
+        // Handle additional error scenarios here if needed
+      });
   }
-  function switchPlayer2Stat(playerID, stat) {
-    fetch(
-      `https://api.sportsdata.io/v3/nba/stats/json/PlayerSeasonStatsByPlayer/2024/${playerID}?key=1eccc8cbb6d44ff0a7a7eb852df96606`,
-      requestOptions
-    )
-      .then((response) => response.json())
-      .then(
-        (result) => ((pStat = result[statsMap[stat]]), setPlayer2Stat(pStat))
-      )
-      .catch((error) => console.error(error));
-  }
+
   function updateScore(n) {
     setUserPoints(userPoints + n);
   }
@@ -359,6 +539,19 @@ function App() {
       </div>
     );
   }
+
+  const listHighScores = (scores) => (
+    <Typography component="div" className="MuiTypography-root MuiTypography-body1 css-7a4s5n-MuiTypography-root">
+      <h2>Top Scores</h2>
+      <ol>
+        {scores.map((score, index) => (
+          <Typography key={index} component="li" className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root">
+            {score[0]}.....🏀{score[1]}.....🔥{score[2]}
+          </Typography>
+        ))}
+      </ol>
+    </Typography>
+  );
   function changeColors(team, primary = 0, secondary = 1) {
     setHomePrimary(nbaColors[team][0]);
     setHomeSecondary(nbaColors[team][1]);
@@ -420,8 +613,11 @@ function App() {
     if (timer == "00:00") {
       clearTimer(getDeadTime());
       setUserPoints(0);
+      setStreak(0)
+      setStreakTracker("")
     }
   };
+  // use effects
   useEffect(() => {
     switchPlayer();
   }, []);
@@ -434,11 +630,24 @@ function App() {
   }, [timer]);
   useEffect(() => {
     if (timer === "00:00") {
-      if (userPoints > highScore[1]) {
-        setHighScore([userName, userPoints]);
-      }
+      updateLeaderboard(userName, userPoints, longestStreak);
     }
   }, [timer]);
+
+  const updateLeaderboard = (name, points, streak) => {
+    let updatedScores = [...highScore];
+
+    // Check where to insert the new score
+    for (let i = 0; i < updatedScores.length; i++) {
+      if (points > updatedScores[i][1]) {
+        updatedScores.splice(i, 0, [name, points, streak]);
+        updatedScores.pop(); // Remove the last element (to keep top 5)
+        break;
+      }
+    }
+
+    setHighScore(updatedScores);
+  };
   // main react app return
   return (
     <ThemeProvider theme={theme}>
@@ -458,6 +667,14 @@ function App() {
             checked={checked}
             onChange={switchChange}
           />
+          <Typography
+            variant="h5"
+            align="center"
+            color="text.primary"
+            sx={{ color: currentSecondary }}
+          >
+            {streakTracker}
+          </Typography>
           <Button
             variant="contained"
             color="primary"
@@ -668,6 +885,7 @@ function App() {
             </Stack>
           </Container>
         }
+        {/* Game Over Modal */}
         <Modal
           open={open}
           aria-labelledby="modal-modal-title"
@@ -699,7 +917,7 @@ function App() {
               id="modal-modal-description"
               sx={{ mt: 2, textAlign: "center", color: currentPrimary }}
             >
-              High Score: {highScore[0]} - {highScore[1]}.
+              {listHighScores(highScore)}
             </Typography>
             <Button
               variant="outlined"
@@ -717,7 +935,7 @@ function App() {
               }}
               onClick={handleClose}
             >
-              Play Again
+              Continue
             </Button>
             <Button
               variant="outlined"
@@ -739,6 +957,7 @@ function App() {
             </Button>
           </Box>
         </Modal>
+        {/* Team Picker Modal */}
         <Modal
           open={teamOpen}
           aria-labelledby="nba-team-picker"
@@ -769,6 +988,7 @@ function App() {
             <ListTeams teams={Object.keys(nbaColors)} />
           </Box>
         </Modal>
+        {/* Intro Modal */}
         <Modal
           open={introOpen}
           aria-labelledby="nba-team-picker"
@@ -802,9 +1022,12 @@ function App() {
               Each round, you must guess which of two players have the higher
               stat in the chosen category.
               <br />
-              You have one minute to make as many correct guesses as you can.<br />
+              You have one minute to make as many correct guesses as you can.
+              <br />
               A correct guess is 10 points, but guess wrong, and you lose 10.
               <br />
+              Guess correct twice in a row, and points double.<br />
+              Guess correct 5 times in a row, and points triple.<br />
               You may skip if you are not sure and want to preserve your points.
               <br />
               <br />
@@ -814,7 +1037,8 @@ function App() {
               This is for the '23 -'24 season! <br />
               As a curveball, rookies are included, but do not have stats.
               <br />
-              You can change your favorite team in the top right corner.<br />
+              You can change your favorite team in the top right corner.
+              <br />
               You can toggle light/dark backgrounds in the top left corner.
               <br />
               <br />
