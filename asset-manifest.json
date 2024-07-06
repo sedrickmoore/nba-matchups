@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/nba-matchups/static/css/main.e6c13ad2.css",
-    "main.js": "/nba-matchups/static/js/main.2327c629.js",
+    "main.js": "/nba-matchups/static/js/main.abc8fe71.js",
     "index.html": "/nba-matchups/index.html",
     "main.e6c13ad2.css.map": "/nba-matchups/static/css/main.e6c13ad2.css.map",
-    "main.2327c629.js.map": "/nba-matchups/static/js/main.2327c629.js.map"
+    "main.abc8fe71.js.map": "/nba-matchups/static/js/main.abc8fe71.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.2327c629.js"
+    "static/js/main.abc8fe71.js"
   ]
 }
