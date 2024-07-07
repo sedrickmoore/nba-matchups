@@ -20,7 +20,6 @@ import { TextField } from "@mui/material";
 
 const apiKey = process.env.REACT_APP_NBA_API_KEY;
 
-
 var requestOptions = {
   method: "GET",
   redirect: "follow",
@@ -83,8 +82,6 @@ function App() {
   const [choice, setChoice] = useState(0);
   const [chosenStat, setChosenStat] = useState("");
   const [userPoints, setUserPoints] = useState(0);
-  const [player1ID, setPlayer1ID] = useState(0);
-  const [player2ID, setPlayer2ID] = useState(0);
   const [player1Stat, setPlayer1Stat] = useState(0);
   const [player2Stat, setPlayer2Stat] = useState(0);
   const [timer, setTimer] = useState("00:00");
@@ -101,8 +98,8 @@ function App() {
   const [currentSecondary, setCurrentSecondary] = useState(homeSecondary);
   const [userName, setUserName] = useState("");
   const [introOpen, setIntroOpen] = useState(true);
-  const [streak, setStreak] = useState(0)
-  const [streakTracker, setStreakTracker] = useState("")
+  const [streak, setStreak] = useState(0);
+  const [streakTracker, setStreakTracker] = useState("");
   const [highScore, setHighScore] = useState([
     ["Player 1", 50, 5],
     ["Player 2", 40, 4],
@@ -110,14 +107,9 @@ function App() {
     ["Player 4", 20, 2],
     ["Player 5", 10, 1],
   ]);
-  const [longestStreak, setLongestStreak] = useState(0)
+  const [longestStreak, setLongestStreak] = useState(0);
   const [inputError, setInputError] = useState(false);
   // regular variables
-  let p1;
-  let p2;
-  let id1;
-  let id2;
-  let pStat;
   const Ref = useRef(null);
   // arrow functions
   const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -185,57 +177,56 @@ function App() {
   const submitChoice = () => {
     if (player1Stat > player2Stat) {
       if (choice == 1) {
-        if(streak >= 0 && streak < 2){
+        if (streak >= 0 && streak < 2) {
           updateScore(10);
           setStreak(streak + 1);
-          if(streak > longestStreak){
-            setLongestStreak(streak)
+          if (streak > longestStreak) {
+            setLongestStreak(streak);
           }
-          if(streak === 0){
-            setStreakTracker('')
+          if (streak === 0) {
+            setStreakTracker("");
+          } else if (streak === 1) {
+            setStreakTracker("🔥");
           }
-          else if(streak === 1){
-            setStreakTracker('🔥')
-          }
-        } else if (streak >= 2 && streak < 5){
+        } else if (streak >= 2 && streak < 5) {
           updateScore(20);
           setStreak(streak + 1);
-          if(streak > longestStreak){
-            setLongestStreak(streak)
+          if (streak > longestStreak) {
+            setLongestStreak(streak);
           }
-          if(streak === 2){
-            setStreakTracker('🔥🔥')
+          if (streak === 2) {
+            setStreakTracker("🔥🔥");
           }
         } else {
           updateScore(30);
           setStreak(streak + 1);
-          if(streak > longestStreak){
-            setLongestStreak(streak)
+          if (streak > longestStreak) {
+            setLongestStreak(streak);
           }
-          if(streak === 5){
-            setStreakTracker('🔥🔥🔥')
+          if (streak === 5) {
+            setStreakTracker("🔥🔥🔥");
           }
         }
       } else if (choice == 2) {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
-          setStreak(0)
-          if(streak === 0){
-            setStreakTracker('🥶')
+          setStreak(0);
+          if (streak === 0) {
+            setStreakTracker("🥶");
           } else {
-            setStreakTracker('')
+            setStreakTracker("");
           }
         }
       } else if (choice == 0) {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
-          setStreak(0)
-          if(streak === 0){
-            setStreakTracker('🥶')
+          setStreak(0);
+          if (streak === 0) {
+            setStreakTracker("🥶");
           } else {
-            setStreakTracker('')
+            setStreakTracker("");
           }
         }
       }
@@ -244,54 +235,53 @@ function App() {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
-          setStreak(0)
-          if(streak === 0){
-            setStreakTracker('🥶')
+          setStreak(0);
+          if (streak === 0) {
+            setStreakTracker("🥶");
           } else {
-            setStreakTracker('')
+            setStreakTracker("");
           }
         }
       } else if (choice == 2) {
-        if(streak >= 0 && streak < 2){
+        if (streak >= 0 && streak < 2) {
           updateScore(10);
           setStreak(streak + 1);
-          if(streak > longestStreak){
-            setLongestStreak(streak)
+          if (streak > longestStreak) {
+            setLongestStreak(streak);
           }
-          if(streak === 0){
-            setStreakTracker('')
+          if (streak === 0) {
+            setStreakTracker("");
+          } else if (streak === 1) {
+            setStreakTracker("🔥");
           }
-          else if(streak === 1){
-            setStreakTracker('🔥')
-          }
-        } else if (streak >= 2 && streak < 5){
+        } else if (streak >= 2 && streak < 5) {
           updateScore(20);
           setStreak(streak + 1);
-          if(streak > longestStreak){
-            setLongestStreak(streak)
+          if (streak > longestStreak) {
+            setLongestStreak(streak);
           }
-          if(streak === 2){
-            setStreakTracker('🔥🔥')
+          if (streak === 2) {
+            setStreakTracker("🔥🔥");
           }
         } else {
           updateScore(30);
           setStreak(streak + 1);
-          if(streak > longestStreak){
-            setLongestStreak(streak)
+          if (streak > longestStreak) {
+            setLongestStreak(streak);
           }
-          if(streak === 5){
-            setStreakTracker('🔥🔥🔥')
+          if (streak === 5) {
+            setStreakTracker("🔥🔥🔥");
           }
         }
       } else if (choice == 0) {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
-          setStreak(0)
-          if(streak === 0){
-            setStreakTracker('🥶')
+          setStreak(0);
+          if (streak === 0) {
+            setStreakTracker("🥶");
           } else {
-            setStreakTracker('')
+            setStreakTracker("");
           }
         }
       }
@@ -300,74 +290,73 @@ function App() {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
-          setStreak(0)
-          if(streak === 0){
-            setStreakTracker('🥶')
+          setStreak(0);
+          if (streak === 0) {
+            setStreakTracker("🥶");
           } else {
-            setStreakTracker('')
+            setStreakTracker("");
           }
         }
       } else if (choice == 2) {
         // alert("Incorrect");
         if (userPoints > 0) {
           updateScore(-10);
-          setStreak(0)
-          if(streak === 0){
-            setStreakTracker('🥶')
+          setStreak(0);
+          if (streak === 0) {
+            setStreakTracker("🥶");
           } else {
-            setStreakTracker('')
+            setStreakTracker("");
           }
         }
       } else if (choice == 0) {
-        if(streak >= 0 && streak < 2){
+        if (streak >= 0 && streak < 2) {
           updateScore(10);
           setStreak(streak + 1);
-          if(streak > longestStreak){
-            setLongestStreak(streak)
+          if (streak > longestStreak) {
+            setLongestStreak(streak);
           }
-          if(streak === 0){
-            setStreakTracker('')
+          if (streak === 0) {
+            setStreakTracker("");
+          } else if (streak === 1) {
+            setStreakTracker("🔥");
           }
-          else if(streak === 1){
-            setStreakTracker('🔥')
-          }
-        } else if (streak >= 2 && streak < 5){
+        } else if (streak >= 2 && streak < 5) {
           updateScore(20);
           setStreak(streak + 1);
-          if(streak > longestStreak){
-            setLongestStreak(streak)
+          if (streak > longestStreak) {
+            setLongestStreak(streak);
           }
-          if(streak === 2){
-            setStreakTracker('🔥🔥')
+          if (streak === 2) {
+            setStreakTracker("🔥🔥");
           }
         } else {
           updateScore(30);
           setStreak(streak + 1);
-          if(streak > longestStreak){
-            setLongestStreak(streak)
+          if (streak > longestStreak) {
+            setLongestStreak(streak);
           }
-          if(streak === 5){
-            setStreakTracker('🔥🔥🔥')
+          if (streak === 5) {
+            setStreakTracker("🔥🔥🔥");
           }
         }
       }
     }
-    console.log(`streak = ${streak}`)
+    console.log(`streak = ${streak}`);
   };
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setStreakTracker("")
-    setLongestStreak(0)
-  }
+    setStreakTracker("");
+    setLongestStreak(0);
+  };
   const handleTeamOpen = () => setTeamOpen(true);
   const handleTeamClose = () => setTeamOpen(false);
   const handleIntroOpen = () => {
     setIntroOpen(true);
     setUserPoints(0);
-    setStreak(0)
-    setStreakTracker("")
-    setLongestStreak(0)
+    setStreak(0);
+    setStreakTracker("");
+    setLongestStreak(0);
   };
   const handleIntroClose = () => setIntroOpen(false);
   const switchChange = (event) => {
@@ -435,14 +424,12 @@ function App() {
     )
       .then((response) => response.json())
       .then((result) => {
-        p1 = result[randomPlayer1];
-        p2 = result[randomPlayer2];
-        id1 = p1.PlayerID;
-        id2 = p2.PlayerID;
+        const p1 = result[randomPlayer1];
+        const p2 = result[randomPlayer2];
+        const id1 = p1.PlayerID;
+        const id2 = p2.PlayerID;
         setPlayer1(p1);
         setPlayer2(p2);
-        setPlayer1ID(id1);
-        setPlayer2ID(id2);
         let currentStat = randomNum(0, 5);
         setChosenStat(stats[currentStat]);
         switchPlayerStat(id1, stats[currentStat], setPlayer1Stat);
@@ -544,11 +531,18 @@ function App() {
   }
 
   const listHighScores = (scores) => (
-    <Typography component="div" className="MuiTypography-root MuiTypography-body1 css-7a4s5n-MuiTypography-root">
+    <Typography
+      component="div"
+      className="MuiTypography-root MuiTypography-body1 css-7a4s5n-MuiTypography-root"
+    >
       <h2>Top Scores</h2>
       <ol>
         {scores.map((score, index) => (
-          <Typography key={index} component="li" className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root">
+          <Typography
+            key={index}
+            component="li"
+            className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
             {score[0]}.....🏀{score[1]}.....🔥{score[2]}
           </Typography>
         ))}
@@ -616,8 +610,8 @@ function App() {
     if (timer == "00:00") {
       clearTimer(getDeadTime());
       setUserPoints(0);
-      setStreak(0)
-      setStreakTracker("")
+      setStreak(0);
+      setStreakTracker("");
     }
   };
   // use effects
@@ -1029,8 +1023,10 @@ function App() {
               <br />
               A correct guess is 10 points, but guess wrong, and you lose 10.
               <br />
-              Guess correct twice in a row, and points double.<br />
-              Guess correct 5 times in a row, and points triple.<br />
+              Guess correct twice in a row, and points double.
+              <br />
+              Guess correct 5 times in a row, and points triple.
+              <br />
               You may skip if you are not sure and want to preserve your points.
               <br />
               <br />
