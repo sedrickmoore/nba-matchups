@@ -73,7 +73,7 @@ const nbaColors = {
   "Washington Wizards": ["#E31837", "#002B5C"],
 };
 
-function App() {
+export default function App() {
   // use state variables
   const [player1, setPlayer1] = useState("");
   const [player2, setPlayer2] = useState("");
@@ -1062,5 +1062,3 @@ function App() {
     </ThemeProvider>
   );
 }
-
-export default App;
