@@ -24,7 +24,6 @@ var requestOptions = {
   method: "GET",
   redirect: "follow",
 };
-let prevNum;
 const stats = [
   "Points",
   "Rebounds",
@@ -41,7 +40,6 @@ const statsMap = {
   Blocks: "BlockedShots",
   Turnovers: "Turnovers",
 };
-
 const nbaColors = {
   "Atlanta Hawks": ["#FDB927", "#C8102E"],
   "Boston Celtics": ["#BA9653", "#007A33"],
@@ -111,6 +109,7 @@ function App() {
   const [inputError, setInputError] = useState(false);
   // regular variables
   const Ref = useRef(null);
+  let prevNum;
   // arrow functions
   const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 62,
@@ -350,7 +349,6 @@ function App() {
     setLongestStreak(0);
   };
   const handleTeamOpen = () => setTeamOpen(true);
-  const handleTeamClose = () => setTeamOpen(false);
   const handleIntroOpen = () => {
     setIntroOpen(true);
     setUserPoints(0);
@@ -413,8 +411,42 @@ function App() {
       handleIntroClose();
     }
   };
+  const listHighScores = (scores) => (
+    <Typography
+      component="div"
+      className="MuiTypography-root MuiTypography-body1 css-7a4s5n-MuiTypography-root"
+    >
+      <h2>Top Scores</h2>
+      <ol>
+        {scores.map((score, index) => (
+          <Typography
+            key={index}
+            component="li"
+            className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
+          >
+            {score[0]}.....🏀{score[1]}.....🔥{score[2]}
+          </Typography>
+        ))}
+      </ol>
+    </Typography>
+  );
+  const updateLeaderboard = (name, points, streak) => {
+    let updatedScores = [...highScore];
+
+    // Check where to insert the new score
+    for (let i = 0; i < updatedScores.length; i++) {
+      if (points > updatedScores[i][1]) {
+        updatedScores.splice(i, 0, [name, points, streak]);
+        updatedScores.pop(); // Remove the last element (to keep top 5)
+        break;
+      }
+    }
+
+    setHighScore(updatedScores);
+  };
   // functions
   // Switches players and grabs and sets their player ID
+  // API call
   function switchPlayer(callback) {
     let randomPlayer1 = randomNum(0, 465);
     let randomPlayer2 = randomNum(0, 465);
@@ -445,6 +477,7 @@ function App() {
       .catch((error) => console.error(error));
   }
   // Changes player stats
+  // API call
   function switchPlayerStat(playerID, stat, setPlayerStat) {
     fetch(
       `https://api.sportsdata.io/v3/nba/stats/json/PlayerSeasonStatsByPlayer/2024/${playerID}?key=${apiKey}`,
@@ -497,7 +530,6 @@ function App() {
         // Handle additional error scenarios here if needed
       });
   }
-
   function updateScore(n) {
     setUserPoints(userPoints + n);
   }
@@ -529,26 +561,6 @@ function App() {
       </div>
     );
   }
-
-  const listHighScores = (scores) => (
-    <Typography
-      component="div"
-      className="MuiTypography-root MuiTypography-body1 css-7a4s5n-MuiTypography-root"
-    >
-      <h2>Top Scores</h2>
-      <ol>
-        {scores.map((score, index) => (
-          <Typography
-            key={index}
-            component="li"
-            className="MuiTypography-root MuiTypography-body1 css-ahj2mt-MuiTypography-root"
-          >
-            {score[0]}.....🏀{score[1]}.....🔥{score[2]}
-          </Typography>
-        ))}
-      </ol>
-    </Typography>
-  );
   function changeColors(team, primary = 0, secondary = 1) {
     setHomePrimary(nbaColors[team][0]);
     setHomeSecondary(nbaColors[team][1]);
@@ -630,21 +642,6 @@ function App() {
       updateLeaderboard(userName, userPoints, longestStreak);
     }
   }, [timer]);
-
-  const updateLeaderboard = (name, points, streak) => {
-    let updatedScores = [...highScore];
-
-    // Check where to insert the new score
-    for (let i = 0; i < updatedScores.length; i++) {
-      if (points > updatedScores[i][1]) {
-        updatedScores.splice(i, 0, [name, points, streak]);
-        updatedScores.pop(); // Remove the last element (to keep top 5)
-        break;
-      }
-    }
-
-    setHighScore(updatedScores);
-  };
   // main react app return
   return (
     <ThemeProvider theme={theme}>
