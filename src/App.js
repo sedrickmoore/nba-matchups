@@ -18,7 +18,9 @@ import Switch from "@mui/material/Switch";
 import { styled } from "@mui/material/styles";
 import { TextField } from "@mui/material";
 
-const apiKey = process.env.REACT_APP_NBA_API_KEY;
+// const apiKey = process.env.REACT_APP_NBA_API_KEY;
+
+const apiKey = "e57eb6a0c3f147a4b718b06925030d3d";
 
 var requestOptions = {
   method: "GET",
